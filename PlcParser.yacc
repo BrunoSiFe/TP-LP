@@ -92,7 +92,7 @@ AtomExpr : Const(Const)
 AppExpr : AtomExpr AtomExpr (Call(AtomExpr1,AtomExpr2))
     | AppExpr AtomExpr (Call(AppExpr,AtomExpr))
 
-Const : CONBTRUE (ConB(TRUE)) | CONBFALSE (ConB(FALSE))
+Const : CONBTRUE (ConB(true)) | CONBFALSE (ConB(false))
     | CINT (ConI(CINT))
     | LPAR RPAR (NIL)
     | LPAR TYPE LCOL RCOL RPAR (ESeq(Type))

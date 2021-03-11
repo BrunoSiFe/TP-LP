@@ -565,7 +565,7 @@ NAME1, _, _)) :: _ :: ( _, ( _, FUN1left, _)) :: rest671)) => let val
  val  (Type as Type1) = Type1 ()
  val  (Expr as Expr1) = Expr1 ()
  val  (Prog as Prog1) = Prog1 ()
- in (MakeFun(NAME, Args, Type, Expr, Prog))
+ in (makeFun(NAME, Args, Type, Expr, Prog))
 end)
  in ( LrTable.NT 1, ( result, FUN1left, Prog1right), rest671)
 end
@@ -811,12 +811,12 @@ end)
 
 end
 |  ( 35, ( ( _, ( _, CONBTRUE1left, CONBTRUE1right)) :: rest671)) =>
- let val  result = MlyValue.Const (fn _ => (ConB(TRUE)))
+ let val  result = MlyValue.Const (fn _ => (ConB(true)))
  in ( LrTable.NT 5, ( result, CONBTRUE1left, CONBTRUE1right), rest671)
 
 end
 |  ( 36, ( ( _, ( _, CONBFALSE1left, CONBFALSE1right)) :: rest671)) =>
- let val  result = MlyValue.Const (fn _ => (ConB(FALSE)))
+ let val  result = MlyValue.Const (fn _ => (ConB(false)))
  in ( LrTable.NT 5, ( result, CONBFALSE1left, CONBFALSE1right), 
 rest671)
 end
