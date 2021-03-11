@@ -94,7 +94,7 @@ AppExpr : AtomExpr AtomExpr (Call(AtomExpr1,AtomExpr2))
 
 Const : CONBTRUE (ConB(true)) | CONBFALSE (ConB(false))
     | CINT (ConI(CINT))
-    | LPAR RPAR (NIL)
+    | LPAR RPAR ([]])
     | LPAR TYPE LCOL RCOL RPAR (ESeq(Type))
 
 Comps : Expr COMMA Expr (Expr1 :: Expr2 :: [])
