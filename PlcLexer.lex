@@ -70,7 +70,7 @@ identifier = [a-zA-Z_][a-zA-Z_0-9]*;
 
 "+" => (PLUS(yypos, yypos));
 "-" => (MINUS(yypos, yypos));
-"*" => (TIMES(yypos, yypos));
+"*" => (MULTI(yypos, yypos));
 "/" => (DIV(yypos, yypos));
 "=" => (EQ(yypos, yypos));
 "!=" => (NOTEQ(yypos, yypos));
