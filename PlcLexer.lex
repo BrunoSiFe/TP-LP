@@ -8,29 +8,6 @@ type slvalue = Tokens.svalue
 type ('a,'b) token = ('a,'b) Tokens.token
 type lexresult = (slvalue, pos)token
 
-fun keyword (s, lpos, rpos) =
-    case s of
-        "var" => Var(lpos,rpos)
-        | "Bool" => Bool(lpos,rpos)
-        | "else" => Else (lpos,rpos)
-        | "end" => End(lpos,rpos)
-        | "false" => false(lpos,rpos)
-        | "fn" => Fn(lpos,rpos)
-        | "fun" => Fun(lpos,rpos)
-        | "hd" => Hd(lpos,rpos)
-        | "if" => If(lpos,rpos)
-        | "Int" => Int(lpos,rpos)
-        | "ise" => Ise(lpos,rpos)
-        | "match" => Match(lpos,rpos)
-        | "Nil" => Nil(lpos,rpos)
-        | "print" => Print(lpos,rpos)
-        | "rec" => Rec(lpos,rpos)
-        | "then" => Then(lpos,rpos)
-        | "tl" => Tl(lpos,rpos)
-        | "true" => True(lpos,rpos)
-        | "with" => Whith(lpos,rpos)
-        | _   => Name (s, lpos, rpos)
-
 (* A function to print a message error on the screen. *)
 val error = fn x => TextIO.output(TextIO.stdOut, x ^ "\n")
 val lineNumber = ref 0
@@ -43,54 +20,80 @@ fun getLineAsString() =
         Int.toString lineNum
     end
 
-(* Define what to do when the end of the file is reached. *)
-fun eof () = Tokens.EOF(0,0)
+fun keyWord (s, lpos, rpos) =
+    case s of 
+        "var" => VAR (lpos, rpos)
+        | "Bool" => TBOOL (lpos, rpos)
+        | "else" => ELSE (lpos, rpos)
+        | "end" => END (lpos, rpos)
+        | "false" => FALSE (lpos, rpos)
+        | "fn" => ANONFUN (lpos, rpos)
+        | "fun" => FUN (lpos, rpos)
+        | "hd" => HD (lpos, rpos)
+        | "if" => IF (lpos, rpos)
+        | "Int" => TINT (lpos, rpos)
+        | "ise" => ISE (lpos, rpos)
+        | "match" => MATCH (lpos, rpos)
+        | "Nil" => TNIL (lpos, rpos)
+        | "print" => PRINT (lpos, rpos)
+        | "rec" => REC (lpos, rpos)
+        | "then" => THEN (lpos, rpos)
+        | "tl" => TL (lpos, rpos)
+        | "true" => TRUE (lpos, rpos)
+        | "with" => WITH (lpos, rpos)
+        | "_" => UNDERSCORE (lpos, rpos)
+        | _   => NAME (s, lpos, rpos)
 
 fun strToInt s =
     case Int.fromString s of
         SOME i => i
-        | NOME => raise Fail ("could not convert string'"^s^"'to integer")
+    |   NONE => raise Fail ("Could not convert string '" ^ s ^ "' to integer")
+
+(* Define what to do when the end of the file is reached. *)
+fun eof () = Tokens.EOF(0,0)
 
 (* Initialize the lexer. *)
 fun init() = ()
 %%
 %header (functor PlcLexerFun(structure Tokens: PlcParser_TOKENS));
-alpha = [A-Za-z];
-digit = [0-9];
-whitespace = [\ \t];
-identifier = [a-zA-Z_][a-zA-Z_0-9]*;
-
+alpha=[A-Za-z];
+digit=[0-9];
+whitespace=[\ \t];
+identifier=[a-zA-Z_][a-zA-Z_0-9]*;
+%s COMMENT;
+startcomment=\(\*;
+endcomment=\*\);
 %%
 
-
-\n => (lineNumber := !lineNumber+1; lex());
-{whitespace}+ => (lex());
-{digit}+ => (CINT (strToInt(yytext), yypos, yypos));
-{identifier} => (keyword(yytext, yypos, yypos));
-
-"+" => (PLUS(yypos, yypos));
-"-" => (MINUS(yypos, yypos));
-"*" => (MULTI(yypos, yypos));
-"/" => (DIV(yypos, yypos));
-"=" => (EQ(yypos, yypos));
-"!=" => (NOTEQ(yypos, yypos));
-"(" => (LPAR(yypos, yypos));
-")" => (RPAR(yypos, yypos));
-"[" => (LCOL(yypos, yypos));
-"]" => (RCOL(yypos, yypos));
-"{" => (LBRACKET(yypos, yypos));
-"}" => (RBRACKET(yypos, yypos));
-"<" => (LESSER(yypos, yypos));
-"<=" => (LESSEREQ(yypos,yypos));
-"::" => (DOUBLEPOINT(yypos,yypos));
-";" => (SEMIC(yypos, yypos));
-"!" => (NOT(yypos));
-"," => (COMMA(yypos));
-":" => (COLON(yypos));
-"->" => (ARROW(yypos, yypos));
-"=>" => (FUNARROW(yypos, yypos));
-"|" => (PIPE(yypos, yypos));
-"_" => (UNDERSCORE(yypos, yypos));
-"&&" => (AND(yypos, yypos));
-
-. =>(error("\n***Lexer erro: bad character *** \n"); raise Fail ("Lexer erro: bad character" ^yytext));
+\n => (lineNumber := !lineNumber + 1; lex());
+<INITIAL>{whitespace}+ => (lex());
+<INITIAL>{digit}+ => (CINT(strToInt(yytext), yypos, yypos));
+<INITIAL>{identifier} => (keyWord(yytext, yypos, yypos));
+<INITIAL>"+" => (PLUS(yypos, yypos));
+<INITIAL>"-" => (MINUS(yypos, yypos));
+<INITIAL>"*" => (MULTI(yypos, yypos));
+<INITIAL>"/" => (DIV(yypos, yypos));
+<INITIAL>"(" => (LPAR(yypos, yypos));
+<INITIAL>")" => (RPAR(yypos, yypos));
+<INITIAL>"=" => (EQ(yypos, yypos));
+<INITIAL>";" => (SEMIC(yypos, yypos));
+<INITIAL>"&&" => (AND(yypos, yypos));
+<INITIAL>"!=" => (NOTEQ(yypos, yypos));
+<INITIAL>":" => (DPOINT(yypos, yypos));
+<INITIAL>"::" => (DOUBLEPOINT(yypos, yypos));
+<INITIAL>"<" => (LESS(yypos, yypos));
+<INITIAL>"<=" => (LESSEQ(yypos, yypos));
+<INITIAL>"{" => (LBRACKET(yypos, yypos));
+<INITIAL>"}" => (RBRACKET(yypos, yypos));
+<INITIAL>"[" => (LCOL(yypos, yypos));
+<INITIAL>"]" => (RCOL(yypos, yypos));
+<INITIAL>"," => (COMMA(yypos, yypos));
+<INITIAL>"!" => (NOT(yypos, yypos));
+<INITIAL>"|" => (PIPE(yypos, yypos));
+<INITIAL>"->" => (ARROW(yypos, yypos));
+<INITIAL>"=>" => (FUNARROW(yypos, yypos));
+<INITIAL>{startcomment} => (YYBEGIN COMMENT; lex());
+<COMMENT>{endcomment} => (YYBEGIN INITIAL; lex());
+<COMMENT>. => (lex());
+<INITIAL>. => (error("\n***Lexer errorbad character ***\n");
+    raise Fail("Lexer error: bad character " ^yytext));
