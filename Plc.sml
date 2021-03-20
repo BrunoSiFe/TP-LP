@@ -28,7 +28,7 @@ fun run exp =
     handle SymbolNotFound => let val p = print ("Error: Expression contains unrecognized symbols.") in raise SymbolNotFound end
           | EmptySeq => let val p =  print ("Error: Sequence without type.") in raise EmptySeq end
           | NotEqTypes => let val p =  print ("Error: Comparisson between two different data types.") in raise NotEqTypes end
-          | WrongRetType => let val p =  print ("Error: Function body does not match return type.") in raise WrongRetType end
+          | WrongRetType => let val p =  print ("Error: Function body  does not match return type.") in raise WrongRetType end
           | DiffBrTypes => let val p =  print ("Error: Different branch types.") in raise DiffBrTypes end
           | IfCondNotBool => let val p =  print ("Error: Not boolean condition.") in raise IfCondNotBool end
           | NoMatchResults => let val p =  print ("Error: There is no match pattern defined.") in raise NoMatchResults end
@@ -43,11 +43,9 @@ fun run exp =
     val expResult = let in
       eval exp []
     end
-    handle SymbolNotFound => let val p = print ("Error: Expression contains unrecognized symbols.") in raise SymbolNotFound end
-         | HDEmptySeq => let val p =  print ("Error: Can not acces head of empty sequence.") in raise HDEmptySeq end
+    handle HDEmptySeq => let val p =  print ("Error: Can not acces head of empty sequence.") in raise HDEmptySeq end
          | TLEmptySeq => let val p =  print ("Error: Can not acces tail of empty sequence.") in raise TLEmptySeq end
          | ValueNotFoundInMatch => let val p =  print ("Error: Could not match with the match list.") in raise ValueNotFoundInMatch end
-         | NotAFunc => let val p =  print ("Error: Variable that is not a function is being called.") in raise NotAFunc end
          | Impossible => let val p = print ("Error: Impossible action.") in raise Impossible end
          | _ => let val p = print ("Error: Exception Raised.") in raise Impossible end
   in
