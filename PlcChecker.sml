@@ -53,11 +53,11 @@ fun teval (ConI _) _ = IntT
           BoolT => if seconExpType = thirdExpType then seconExpType else raise DiffBrTypes
         | _ => raise IfCondNotBool
     end
-  | teval (Prim1(oper, exp)) (env:plcType env) =
+  | teval (Prim1(operation, exp)) (env:plcType env) =
     let
       val expType = teval exp env
     in
-      case oper of
+      case operation of
           "!" => if expType = BoolT then BoolT else raise UnknownType
         | "-" => if expType = IntT then IntT else raise UnknownType
         | "hd" => let in
@@ -78,12 +78,12 @@ fun teval (ConI _) _ = IntT
         | "print" => ListT []
         | _ => raise UnknownType
     end
-  | teval (Prim2(oper, firstExp, seconExp)) (env:plcType env) =
+  | teval (Prim2(operation, firstExp, seconExp)) (env:plcType env) =
     let
       val firstExpType = teval firstExp env
       val seconExpType = teval seconExp env
     in
-      case oper of
+      case operation of
           "&&" => if firstExpType = BoolT andalso seconExpType = BoolT then BoolT else raise UnknownType
         | "::" => let in
             case (firstExpType, seconExpType) of

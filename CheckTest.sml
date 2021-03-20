@@ -1,50 +1,5 @@
 use "Plc.sml";
 
-teval (fromString "15") [];
-teval (fromString "true") [];
-teval (fromString "()") [];
-teval (fromString "(6,false)") [];
-teval (fromString "(6,false)[1]") [];
-teval (fromString "(6,false)[2]") [];
-teval (fromString "(6,x)[2]") [("x", SeqT IntT)];
-teval (fromString "([Bool] [])") [];
-teval (fromString "print x; true") [("x", BoolT)];
-teval (fromString "fn (Int x) => -x end") [];
-teval (fromString "var x = 9; x + 3") [];
-teval (fromString "fun f(Int x) = x; f(1)") [];
-teval (fromString "(x, y, z)[1]") [("x", IntT), ("y", IntT), ("z", IntT)];
-teval (fromString "(x, y, z)[2]") [("x", IntT), ("y", IntT), ("z", IntT)];
-teval (fromString "(x, y, z)[3]") [("x", IntT), ("y", IntT), ("z", IntT)];
-teval (fromString "var func1 = fn (Int x) => 2*x end; var func2 = fn (Int x) => 3*x end; var funcList = (func1, func2); var myF = funcList[1]; myF(5)") [];
-teval (fromString "-5") [];
-teval (fromString "-x") [("x", IntT)];
-teval (fromString "true && false") [];
-teval (fromString "true && true") [];
-teval (fromString "5 + 5") [];
-teval (fromString "print x") [("x", IntT)];
-teval (fromString "print y; print x") [("x", IntT), ("y", IntT)];
-teval (fromString "print y; x + 8") [("x", IntT), ("y", IntT)];
-teval (fromString "()") [];
-teval (fromString "([Int] [])") [];
-teval (fromString "1::2::3::4::([Int] [])") [];
-teval (fromString "(1,2)::(2,3)::(3,4)::(4,5)::([(Int,Int)] [])") [];
-teval (fromString "(1,true)::(2,false)::(3,true)::(4,false)::([(Int,Bool)] [])") [];
-teval (fromString "(false, 8)::(false, 9)::(true, 1)::(true, 2)::([(Bool, Int)] [])") [];
-teval (fromString "x::y::z::w") [("x", IntT), ("y", IntT), ("z", IntT), ("w", SeqT IntT)];
-teval (fromString "if x = z then y + 7 else w + 7") [("x", IntT), ("y", IntT), ("z", IntT), ("w", IntT)];
-teval (fromString "match x with | 0 -> 1| _ -> -1 end") [("x", IntT)];
-teval (fromString "match x with | 0 -> 1 end") [("x", IntT)];
-teval (fromString "var x = 3; if x < 2 then x else y") [("y", IntT)];
-teval (fromString "var x = 3; if x < 4 then x else y") [("y", IntT)];
-teval (fromString "var x = (1,2,3,4); print x; x[2]") [];
-teval (fromString "fun f(Int x) = x; print 5") [];
-teval (fromString "fun f(Int x, Int y) = x + y; f(1,2)") [];
-teval (fromString "var a = 35; fun f(Int x, Int y) = x + y + a; f(1,2)") [];
-teval (fromString "fun f() = 1; f()") [];
-teval (fromString "fun f(Int x) = x + 3; f(1)") [];
-teval (fromString "fun rec f(Int n):Int = if n <= 0 then 0 else n + f(n-1); f(5)") [];
-teval (fromString "fun rec f(Int n, Int m):Int = if n <= 0 then 0 else m + f(n-1, m); f(5, 8)") [];
-
 let
     val test = teval (fromString "3::7::t") [("t", IntT)]
 in
